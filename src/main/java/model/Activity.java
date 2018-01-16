@@ -12,11 +12,14 @@ package model;
 public class Activity {
 
     private int idA;
-    private String title ;
-    private String description ;
-    private String name ;
+    private  String title ;
+    private  String description ;
+    private   String name ;
+    private Category category;
     private String phone ;
     private String email ;
+
+    
 
     public int getIdA() {
         return idA;
@@ -74,9 +77,6 @@ public class Activity {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    //private Enum<model.>
-    
-    
+      
    
 }
