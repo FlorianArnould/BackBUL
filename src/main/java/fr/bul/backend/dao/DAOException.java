@@ -6,15 +6,14 @@
 package fr.bul.backend.dao;
 
 /**
- *
  * @author Samy
  */
-public class DAOException extends Exception{
-    DAOException(String message, Exception e){
+public class DAOException extends Exception {
+    DAOException(String message, Exception e) {
         super(message, e);
     }
-    
-    DAOException(String message){
+
+    DAOException(String message) {
         super(message);
     }
 }

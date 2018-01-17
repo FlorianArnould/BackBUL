@@ -6,9 +6,8 @@
 package fr.bul.backend.dao;
 
 /**
- *
  * @author Samy
  */
 public class PostDAOImpl {
-    
+
 }

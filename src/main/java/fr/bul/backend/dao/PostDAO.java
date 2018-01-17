@@ -5,22 +5,22 @@
  */
 package fr.bul.backend.dao;
 
+import fr.bul.backend.model.GPSCoordinates;
+import fr.bul.backend.model.Post;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import model.Post;
 
 /**
- *
  * @author Samy
  */
 public class PostDAO {
 
     private Connection con;
-    
+
     public PostDAO() {
         con = SingletonConnection.getConnection();
     }
@@ -32,7 +32,9 @@ public class PostDAO {
             PreparedStatement ps = con.prepareStatement(req);
             ResultSet resultat = ps.executeQuery();
             while (resultat.next()) {
-                Post p = new Post(resultat.getString(2), resultat.getString(3), resultat.getString(4));
+                // TODO: 17/01/18 add the real coordinates
+                GPSCoordinates gps = new GPSCoordinates(0, 0);
+                Post p = new Post(resultat.getString(2), resultat.getString(3), resultat.getString(4), gps);
                 System.out.println(p);
                 listeP.add(p);
             }
@@ -50,7 +52,7 @@ public class PostDAO {
             ps.setString(1, "%" + rech + "%");
             ResultSet resultat = ps.executeQuery();
             while (resultat.next()) {
-                Post p = new Post(resultat.getString(1),resultat.getString(2), resultat.getString(3), resultat.getString(4),resultat.getString(5));
+                Post p = new Post(resultat.getString(1), resultat.getString(2), resultat.getString(3), resultat.getString(4), resultat.getString(5));
                 System.out.println(p);
                 listeP.add(p);
             }
@@ -59,7 +61,7 @@ public class PostDAO {
         }
         return listeP;
     }
-    
+
     public void createPost(Post p) throws DAOException {
         String req = "INSERT INTO post(title,description,name,phone,email) values (?,?,?,?,?)";
         PreparedStatement preparedStatement;

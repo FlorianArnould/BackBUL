@@ -9,24 +9,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- *
  * @author Samy
  */
 public class SingletonConnection {
-    private static Connection  connection ;
+    private static Connection connection;
+
     static {
         try {
-                Class.forName("org.postgresql.Driver");
-                String url = "jdbc:postgresql://localhost:5432/bulbase";
-                String user = "postgres";
-                String passwd = "jack1010";
-                connection = DriverManager.getConnection(url, user, passwd);
-        }catch(Exception e) {
+            Class.forName("org.postgresql.Driver");
+            String url = "jdbc:postgresql://localhost:5432/bulbase";
+            String user = "bul";
+            String passwd = "savon";
+            connection = DriverManager.getConnection(url, user, passwd);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public static Connection getConnection() {
         return connection;
     }
-    
+
 }

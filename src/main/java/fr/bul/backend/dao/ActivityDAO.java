@@ -5,11 +5,11 @@
  */
 package fr.bul.backend.dao;
 
+import fr.bul.backend.model.Activity;
+
 import java.util.ArrayList;
-import model.*;
 
 /**
- *
  * @author Samy
  */
 

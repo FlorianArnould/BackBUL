@@ -5,30 +5,26 @@
  */
 package fr.bul.backend.dao;
 
+import fr.bul.backend.model.Activity;
+
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import model.Activity;
 
 /**
- *
  * @author Samy
  */
-public class ActivityDaoImpl implements ActivityDAO{
-    private Connection con ; 
-    
+public class ActivityDaoImpl implements ActivityDAO {
+    private Connection con;
+
     public ActivityDaoImpl() {
-        con  = SingletonConnection.getConnection();
+        con = SingletonConnection.getConnection();
         System.out.println("connexion réussie ");
     }
 
-    
-    
+
     @Override
     public ArrayList<Activity> getActivities() {
-         ArrayList<Activity> activities = null ;
+        ArrayList<Activity> activities = null;
 //         
 //         String req = "select * from category ";
 //         ArrayList<Activity> listeT = new ArrayList<Activity>();
@@ -48,6 +44,6 @@ public class ActivityDaoImpl implements ActivityDAO{
 //        }
         return activities;
     }
-    
-    
+
+
 }

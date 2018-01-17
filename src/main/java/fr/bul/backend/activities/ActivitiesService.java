@@ -1,5 +1,7 @@
 package fr.bul.backend.activities;
 
+import fr.bul.backend.model.GPSCoordinates;
+import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
@@ -10,8 +12,13 @@ public class ActivitiesService implements Route {
 
     @Override
     public Object handle(Request request, Response response) {
-        JSONObject json = new JSONObject(request.body());
+        try {
+            JSONObject json = new JSONObject(request.body());
+            GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
 
+        } catch (JSONException e) {
+
+        }
         return "ok";
     }
 }
