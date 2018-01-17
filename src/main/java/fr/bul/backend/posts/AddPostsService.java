@@ -14,7 +14,7 @@ import spark.Route;
 
 public class AddPostsService implements Route {
     public static final String LOCATION = "/addPost";
-    Logger LOGGER = LoggerFactory.getLogger(AddPostsService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddPostsService.class);
 
     @Override
     public Object handle(Request request, Response response) {

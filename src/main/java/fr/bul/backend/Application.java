@@ -11,9 +11,10 @@ public class Application {
     public static void main(String[] args) {
         port(4000);
         staticFileLocation("/public");
-        get(ActivitiesService.LOCATION, new ActivitiesService());
+        post(ActivitiesService.LOCATION, new ActivitiesService());
         post(AddPostsService.LOCATION, new AddPostsService());
         post(SearchPostService.LOCATION, new SearchPostService());
         post(EmergencyService.LOCATION, new EmergencyService());
+        
     }
 }

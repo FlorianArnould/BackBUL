@@ -3,6 +3,7 @@ package fr.bul.backend.activities;
 import fr.bul.backend.dao.ActivityDAO;
 import fr.bul.backend.dao.DAOException;
 import fr.bul.backend.model.*;
+import fr.bul.backend.posts.AddPostsService;
 import fr.bul.backend.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +13,12 @@ import spark.Route;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActivitiesService implements Route {
     public static final String LOCATION = "/activities";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivitiesService.class);
 
 
     // categories: outdoor, cinema, monument, museum, shop, all
@@ -31,12 +35,15 @@ public class ActivitiesService implements Route {
             }
             return answer.toString(4);
         } catch (DAOException e) {
+            LOGGER.error("DAO error : " +e.getMessage(), e);
             response.status(500);
             return "An error occurred";
         } catch (ActivityException e) {
+            LOGGER.error("Category not designed : " +e.getMessage(), e);
             response.status(500);
             return "Category not designed";
         } catch (JSONException e) {
+            LOGGER.error("JSON error : " +e.getMessage(), e);
             response.status(400);
             return "Missing information";
         }
@@ -47,6 +54,12 @@ public class ActivitiesService implements Route {
         String filter = json.getString("filter");
         ActivityDAO dao = new ActivityDAO();
         RSSNews rss = new RSSNews();
+        try {
+            rss.refresh();
+        }catch(RSSActivitiesException e){
+            e.printStackTrace();
+        }
+        
         GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
         List<Activity> activityDAO;
         List<News> activityRSS;
@@ -85,6 +98,10 @@ public class ActivitiesService implements Route {
             tmpElementsToSend.add(new ElementToSend(act, (int) Utils.distance(gps, act.getCoordinates())));
         }
         tmpElementsToSend.sort((p1, p2) -> (p1.getDistance() - p2.getDistance()));
+        if(activityRSS == null){
+            LOGGER.info("null");
+        }
+        LOGGER.info(LOCATION);
         List<JsonElement> toEmpty = new ArrayList<>(activityRSS);
         for (ElementToSend tmpElementToSend : tmpElementsToSend) {
             toSend.add(tmpElementToSend);
