@@ -9,7 +9,7 @@ import static spark.Spark.*;
 
 public class Application {
     public static void main(String[] args) {
-        port(4000);
+        port(8080);
         staticFileLocation("/public");
         post(ActivitiesService.LOCATION, new ActivitiesService());
         post(AddPostsService.LOCATION, new AddPostsService());
