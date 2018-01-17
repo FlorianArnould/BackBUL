@@ -4,6 +4,7 @@ import fr.bul.backend.dao.DAOException;
 import fr.bul.backend.dao.PostDAO;
 import fr.bul.backend.model.ElementToSend;
 import fr.bul.backend.model.GPSCoordinates;
+import fr.bul.backend.model.JsonElement;
 import fr.bul.backend.model.Post;
 import fr.bul.backend.util.Utils;
 import org.json.JSONException;
@@ -32,9 +33,9 @@ public class SearchPostService implements Route {
                 elementsToSend.add(new ElementToSend(post, (int) Utils.distance(gps, post.getCoordinates())));
             }
             elementsToSend.sort((p1, p2) -> (p1.getDistance() - p2.getDistance()));
-            List<Post> postsToSend = posts.subList(Math.min(begin, posts.size() - 1), Math.min(end, posts.size()));
+            List<ElementToSend> postsToSend = elementsToSend.subList(Math.min(begin, posts.size() - 1), Math.min(end, posts.size()));
             JSONObject answer = new JSONObject();
-            for (Post post : postsToSend) {
+            for (ElementToSend post : postsToSend) {
                 answer.accumulate("posts", post.toJSON());
             }
             return answer.toString(4);
