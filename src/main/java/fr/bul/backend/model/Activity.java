@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * @author Samy
  */
-public class Activity {
+public class Activity implements JsonElement {
     private Category _category;
     private String _title;
     private String _description;
@@ -19,16 +19,16 @@ public class Activity {
     private String _email;
     private GPSCoordinates _coordinates;
     private String _url_img;
-    
+
     public Activity(String title, String description, String name, GPSCoordinates coordinates, Category category) {
-        _title =title;
-        _description=description;
+        _title = title;
+        _description = description;
         _category = category;
-        _name=name;
-        _coordinates=coordinates;
+        _name = name;
+        _coordinates = coordinates;
         _email = null;
         _phone = null;
-        _url_img=null;
+        _url_img = null;
     }
 
     public void setPhone(String _phone) {
@@ -50,9 +50,7 @@ public class Activity {
     public void setUrl_img(String _url_img) {
         this._url_img = _url_img;
     }
-    
- 
-    
+
 
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();

@@ -24,6 +24,7 @@ public class PostDAO {
     public PostDAO() {
         con = SingletonConnection.getConnection();
     }
+
     public ArrayList<Post> getPosts() throws DAOException {
         String req = "select * from Post";
         ArrayList<Post> listeP = new ArrayList<Post>();
@@ -63,9 +64,10 @@ public class PostDAO {
         }
         return listeP;
     }
+
     public void createPost(Post p) throws DAOException {
         String req = "INSERT INTO post(title,description,name,phone,email) values (?,?,?,?,?)";
-        try(PreparedStatement preparedStatement = con.prepareStatement(req)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(req)) {
             preparedStatement.setString(1, p.getTitle());
             preparedStatement.setString(2, p.getDescription());
             preparedStatement.setString(3, p.getName());

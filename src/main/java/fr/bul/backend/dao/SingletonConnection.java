@@ -21,7 +21,7 @@ public class SingletonConnection {
             String user = "postgres";
             String passwd = "jack1010";
             connection = DriverManager.getConnection(url, user, passwd);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

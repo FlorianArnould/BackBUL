@@ -27,9 +27,11 @@ public class Post implements JsonElement {
         _email = null;
         _phone = null;
     }
+
     public String getTitle() {
         return _title;
     }
+
     public String getDescription() {
         return _description;
     }
@@ -42,14 +44,14 @@ public class Post implements JsonElement {
         return _coordinates;
     }
 
+    public String getPhone() {
+        return _phone;
+    }
+
     public void setPhone(String phone) {
         _phone = phone;
     }
 
-    public String getPhone() {
-        return _phone;
-    }
-    
     public String getEmail() {
         return _email;
     }
@@ -58,7 +60,7 @@ public class Post implements JsonElement {
         this._email = _email;
     }
 
-    
+
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("title", _title);
