@@ -12,7 +12,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class AddPostsService implements Route {
+public class tAddPostsService implements Route {
     public static final String LOCATION = "/addPost";
     private static final Logger LOGGER = LoggerFactory.getLogger(AddPostsService.class);
 
