@@ -8,6 +8,7 @@ import spark.Response;
 import spark.Route;
 
 public class EmergencyService implements Route {
+    public static final String LOCATION = "/emergency";
     @Override
     public Object handle(Request request, Response response){
         try {

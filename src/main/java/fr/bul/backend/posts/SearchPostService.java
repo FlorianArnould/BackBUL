@@ -32,7 +32,7 @@ public class SearchPostService implements Route {
                 elementsToSend.add(new ElementToSend(post, (int) Utils.distance(gps, post.getCoordinates())));
             }
             elementsToSend.sort((p1, p2) -> (p1.getDistance() - p2.getDistance()));
-            List<Post> postsToSend = posts.subList(Math.min(begin, posts.size() - 1), Math.min(end, posts.size() - 1));
+            List<Post> postsToSend = posts.subList(Math.min(begin, posts.size() - 1), Math.min(end, posts.size()));
             JSONObject answer = new JSONObject();
             for (Post post : postsToSend) {
                 answer.accumulate("posts", post.toJSON());
