@@ -13,6 +13,15 @@ repositories {
     mavenCentral()
 }
 
+task fullJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'fr.bul.backend.Application'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 dependencies {
     compile group: 'org.json', name: 'json', version: '20171018'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.13'
