@@ -30,13 +30,15 @@ public class PostDAO {
         ArrayList<Post> listeP = new ArrayList<Post>();
         try {
             PreparedStatement ps = con.prepareStatement(req);
-            ResultSet resultat = ps.executeQuery();
-            while (resultat.next()) {
-                // TODO: 17/01/18 add the real coordinates
-                GPSCoordinates gps = new GPSCoordinates(0, 0);
-                Post p = new Post(resultat.getString(2), resultat.getString(3), resultat.getString(4), gps);
-                System.out.println(p);
-                listeP.add(p);
+            try (ResultSet resultat = ps.executeQuery()) {
+
+                while (resultat.next()) {
+                    // TODO: 17/01/18 add the real coordinates
+                    GPSCoordinates gps = new GPSCoordinates(0, 0);
+                    Post p = new Post(resultat.getString(2), resultat.getString(3), resultat.getString(4), gps);
+                    System.out.println(p);
+                    listeP.add(p);
+                }
             }
         } catch (SQLException e) {
             throw new DAOException("Error cant get Posts" + e.getMessage());
