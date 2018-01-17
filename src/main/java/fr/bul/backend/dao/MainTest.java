@@ -8,11 +8,11 @@ package fr.bul.backend.dao;
 import fr.bul.backend.model.Activity;
 import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Post;
-import java.util.ArrayList;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
- *
  * @author Samy
  */
 public class MainTest {
@@ -20,19 +20,29 @@ public class MainTest {
         System.out.println("hello world");
         ActivityDAO DAOAc = new ActivityDAO();
         CategoryDAO DAOCa = new CategoryDAO();
-        
+
         PostDAO DAOPo = new PostDAO();
-        
+
         ArrayList<Activity> ac = new ArrayList<Activity>();
-        
+
         ArrayList<Post> posts = new ArrayList<Post>();
-        
-        
-        try{
-//            System.out.println(DAOCa.getCategory(1));
-//            ac=DAOAc.getActivities("","shop");
-//            for (Activity act : ac) {
-//                System.out.println(act.getCategory());
+
+
+        try {
+            System.out.println(DAOCa.getCategory(1));
+            ac = DAOAc.getActivities("", "shop");
+            for (Activity act : ac) {
+                System.out.println(act.getCategory());
+                JSONObject json = new JSONObject();
+                json = act.toJSON();
+                System.out.println(json);
+            }
+//                
+            //}
+
+//        posts = DAOPo.getPosts();
+//        System.out.println("size :" +posts.size());
+//            for (Post p : posts) {
 //                JSONObject json = new JSONObject();
 //		json = act.toJSON();
 //                System.out.println(json);
@@ -51,7 +61,7 @@ public class MainTest {
         }catch(DAOException e) {
             e.printStackTrace();
         }
-        
+
     }
-    
+
 }

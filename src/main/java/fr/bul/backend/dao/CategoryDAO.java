@@ -5,14 +5,12 @@
  */
 package fr.bul.backend.dao;
 
-import fr.bul.backend.model.Activity;
 import fr.bul.backend.model.Category;
-import fr.bul.backend.model.GPSCoordinates;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * @author Samy
@@ -22,24 +20,24 @@ public class CategoryDAO {
     private Connection con;
 
     public CategoryDAO() {
-        con=SingletonConnection.getConnection();
+        con = SingletonConnection.getConnection();
     }
-    
-    public Category getCategory(int id) throws DAOException{
+
+    public Category getCategory(int id) throws DAOException {
         String req = "select * from category where id = ?";
         Category cat = null;
-        
+
         try (PreparedStatement ps = con.prepareStatement(req)) {
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             try (ResultSet resultat = ps.executeQuery()) {
                 if (resultat.next()) {
-                     cat = new Category(resultat.getInt(1), resultat.getString(2));
+                    cat = new Category(resultat.getInt(1), resultat.getString(2));
                 }
             }
         } catch (SQLException e) {
             throw new DAOException("Error cant get Category" + e.getMessage());
         }
         return cat;
-        
+
     }
 }

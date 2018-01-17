@@ -10,7 +10,7 @@ import spark.Route;
 public class EmergencyService implements Route {
     public static final String LOCATION = "/emergency";
     @Override
-    public Object handle(Request request, Response response){
+    public Object handle(Request request, Response response) {
         try {
             JSONObject json = new JSONObject(request.body());
             GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));

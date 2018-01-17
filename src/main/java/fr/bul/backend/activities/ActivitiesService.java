@@ -2,19 +2,15 @@ package fr.bul.backend.activities;
 
 import fr.bul.backend.dao.ActivityDAO;
 import fr.bul.backend.dao.DAOException;
-import fr.bul.backend.model.Activity;
-import fr.bul.backend.model.GPSCoordinates;
-import fr.bul.backend.model.JsonElement;
+import fr.bul.backend.model.*;
+import fr.bul.backend.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import fr.bul.backend.model.ElementToSend
-import fr.bul.backend.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ActivitiesService implements Route {
@@ -29,7 +25,7 @@ public class ActivitiesService implements Route {
             int begin = json.getInt("begin");
             int end = json.getInt("end");
             JSONObject answer = new JSONObject();
-            List<JsonElement> toSend = prepare_List_According_filter(json)
+            List<JsonElement> toSend = prepare_List_According_filter(json);
             for (JsonElement element : toSend) {
                 answer.accumulate("activity", element.toJSON());
             }
@@ -44,79 +40,59 @@ public class ActivitiesService implements Route {
             response.status(400);
             return "Missing information";
         }
-        return "ok";
     }
 
 
-    private List<JsonElement> prepare_List_According_filter(JSONObject json) throws JSONException, ActivityException {
+    private List<JsonElement> prepare_List_According_filter(JSONObject json) throws JSONException, ActivityException, DAOException {
         String filter = json.getString("filter");
         ActivityDAO dao = new ActivityDAO();
         RSSNews rss = new RSSNews();
         GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
-        List<JsonElement> toSend = new ArrayList<>();
+        List<Activity> activityDAO;
+        List<News> activityRSS;
         switch (filter) {
             case "outdoor": //rss
-                List<Activity> activityDAO = dao.getActivities(json.getString("search"));
-                List<Activity> activityRSS= rss.getOutdoorNews();
-                List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
-                toSend = toSendList(activityDAO,activityRSS);
+                activityDAO = dao.getActivities(json.getString("search"), filter);
+                activityRSS = rss.getOutdoorNews();
                 break;
             case "cinema": //rss
-                List<Activity> activityDAO = dao.getActivities(json.getString("search"));
-                List<Activity> activityRSS= rss.getCinemaNews();
-                List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
-                toSend = toSendList(activityDAO,activityRSS);
+                activityDAO = dao.getActivities(json.getString("search"), filter);
+                activityRSS = rss.getCinemaNews();
                 break;
             case "patrimony": //dao
-                List<Activity> activityDAO = dao.getActivities(json.getString("search"));
-                List<Activity> activityRSS= new List<Activity>(); // element kept empty for future extensions
-                List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
-                toSend = toSendList(activityDAO,activityRSS);
+                activityDAO = dao.getActivities(json.getString("search"), filter);
+                activityRSS = new ArrayList<>(); // element kept empty for future extensions
                 break;
             case "shop":
-                List<Activity> activityDAO = dao.getActivities(json.getString("search"));
-                List<Activity> activityRSS= new List<Activity>(); // element kept empty for future extensions
-                List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
-                toSend = toSendList(activityDAO,activityRSS);
+                activityDAO = dao.getActivities(json.getString("search"), filter);
+                activityRSS = new ArrayList<>(); // element kept empty for future extensions
                 break;
             case "all": //rs + dao
-                List<Activity> activityDAO = dao.getActivities(json.getString("search"));
-                List<Activity> activityRSS= rss.getAllNews();
-                List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
-                toSend = toSendList(activityDAO,activityRSS);
-                break;
+                activityDAO = dao.getActivities(json.getString("search"));
+                activityRSS = rss.getAllNews();
                 break;
             default:
                 throw new ActivityException("The category " + filter + " does not exist");
                 // this filter option doesn't exist
         }
-        return toSend;
+        return toSendList(activityDAO, activityRSS, gps);
     }
 
-    private List<JsonElement> toSendList(List<Activity> activityDAO, List<News> activityRSS)
-    {
-        List<ElementToSend> elementsToSend_tmp = new ArrayList<>();
+    private List<JsonElement> toSendList(List<Activity> activityDAO, List<News> activityRSS, GPSCoordinates gps) {
+        List<ElementToSend> tmpElementsToSend = new ArrayList<>();
         List<JsonElement> toSend = new ArrayList<>();
-        for (Activity act : activityDAO.getActivities()) {
-            elementsToSend_tmp.add(new ElementToSend(act, (int) Utils.distance(gps, act.getCoordinates())));
+        for (Activity act : activityDAO) {
+            tmpElementsToSend.add(new ElementToSend(act, (int) Utils.distance(gps, act.getCoordinates())));
         }
-        elementsToSend_tmp.sort((p1, p2) -> (p1.getDistance() - p2.getDistance()));
-        elementsToSend_tmp.sort(new Comparator<ElementToSend>() {
-            @Override
-            public int compare(ElementToSend o1, ElementToSend o2) {
-                return 0;
-            }
-        });
-        List<Activity> toempty = activityRSS;
-        for (int i=0; i<elementsToSend_tmp.size() ; i++)
-        {
-            toSend.add(elementsToSend_tmp.get(i));
-            if (!toempty.isEmpty())
-            {
+        tmpElementsToSend.sort((p1, p2) -> (p1.getDistance() - p2.getDistance()));
+        List<JsonElement> toEmpty = new ArrayList<>(activityRSS);
+        for (ElementToSend tmpElementToSend : tmpElementsToSend) {
+            toSend.add(tmpElementToSend);
+            if (!toEmpty.isEmpty()) {
                 toSend.add(toSend.remove(0));
             }
         }
-        toSend.addAll(toempty);
-        return toSend();
+        toSend.addAll(toEmpty);
+        return toSend;
     }
 }
