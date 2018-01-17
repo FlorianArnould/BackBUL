@@ -64,19 +64,21 @@ public class PostDAO {
         return listeP;
     }
     public void createPost(Post p) throws DAOException {
-        String req = "INSERT INTO post(title,description,name,phone,email) values (?,?,?,?,?)";
+        String req = "INSERT INTO post(title,description,name,phone,email,gpsLong,gbsLat) values (?,?,?,?,?,?,?)";
         try(PreparedStatement preparedStatement = con.prepareStatement(req)) {
             preparedStatement.setString(1, p.getTitle());
             preparedStatement.setString(2, p.getDescription());
             preparedStatement.setString(3, p.getName());
             preparedStatement.setString(4, p.getPhone());
             preparedStatement.setString(5, p.getEmail());
+            preparedStatement.setFloat(6, (float)p.getCoordinates().getLongitude());
+            preparedStatement.setFloat(7, (float)p.getCoordinates().getLatitude());
             int result = preparedStatement.executeUpdate();
             if (result != 1) {
                 throw new DAOException("Cannot insert the new post");
             }
         } catch (SQLException e) {
-            throw new DAOException("An error occurred :" + e.getMessage(), e);
+            throw new DAOException("An error occurred while Adding new POST :" + e.getMessage(), e);
         }
     }
 }

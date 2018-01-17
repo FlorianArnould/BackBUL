@@ -1,6 +1,7 @@
 package fr.bul.backend;
 
 import fr.bul.backend.activities.ActivitiesService;
+import fr.bul.backend.emergency.EmergencyService;
 import fr.bul.backend.posts.AddPostsService;
 import fr.bul.backend.posts.SearchPostService;
 
@@ -12,6 +13,7 @@ public class Application {
         staticFileLocation("/public");
         get(ActivitiesService.LOCATION, new ActivitiesService());
         post(AddPostsService.LOCATION, new AddPostsService());
-        get(SearchPostService.LOCATION, new SearchPostService());
+        post(SearchPostService.LOCATION, new SearchPostService());
+        post(EmergencyService.LOCATION, new EmergencyService());
     }
 }

@@ -6,6 +6,7 @@
 package fr.bul.backend.dao;
 
 import fr.bul.backend.model.Activity;
+import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Post;
 import java.util.ArrayList;
 import org.json.JSONObject;
@@ -28,24 +29,25 @@ public class MainTest {
         
         
         try{
-            System.out.println(DAOCa.getCategory(1));
-            ac=DAOAc.getActivities("","shop");
-            for (Activity act : ac) {
-                System.out.println(act.getCategory());
-                JSONObject json = new JSONObject();
-		json = act.toJSON();
-                System.out.println(json);
-            }
-//                
-		//}
-
-//        posts = DAOPo.getPosts();
-//        System.out.println("size :" +posts.size());
-//            for (Post p : posts) {
+//            System.out.println(DAOCa.getCategory(1));
+//            ac=DAOAc.getActivities("","shop");
+//            for (Activity act : ac) {
+//                System.out.println(act.getCategory());
 //                JSONObject json = new JSONObject();
-//		json = p.toJSON();
+//		json = act.toJSON();
 //                System.out.println(json);
 //            }
+//                
+		//}
+        Post tmp = new Post("vente voiture","je vends voiture ","Flo",new GPSCoordinates(0, 0));
+        DAOPo.createPost(tmp);
+        posts = DAOPo.getPosts("");
+        System.out.println("size :" +posts.size());
+            for (Post p : posts) {
+                JSONObject json = new JSONObject();
+		json = p.toJSON();
+                System.out.println(json);
+            }
         }catch(DAOException e) {
             e.printStackTrace();
         }
