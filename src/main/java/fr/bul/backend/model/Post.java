@@ -7,67 +7,65 @@ package fr.bul.backend.model;
 
 import org.json.JSONObject;
 
-/**
- * @author Samy
- */
+
 public class Post implements JsonElement {
 
-    private String _title;
-    private String _description;
-    private String _name;
-    private String _phone;
-    private String _email;
-    private GPSCoordinates _coordinates;
+    private String title;
+    private String description;
+    private String name;
+    private String phone;
+    private String email;
+    private GPSCoordinates coordinates;
 
     public Post(String title, String description, String name, GPSCoordinates coordinates) {
-        _title = title;
-        _description = description;
-        _name = name;
-        _coordinates = coordinates;
-        _email = null;
-        _phone = null;
+        this.title = title;
+        this.description = description;
+        this.name = name;
+        this.coordinates = coordinates;
+        email = null;
+        phone = null;
     }
 
     public String getTitle() {
-        return _title;
+        return title;
     }
 
     public String getDescription() {
-        return _description;
+        return description;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
     public GPSCoordinates getCoordinates() {
-        return _coordinates;
+        return coordinates;
     }
 
     public String getPhone() {
-        return _phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        _phone = phone;
+        this.phone = phone;
     }
 
     public String getEmail() {
-        return _email;
+        return email;
     }
 
-    public void setEmail(String _email) {
-        this._email = _email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put("title", _title);
-        json.put("description", _description);
-        json.put("name", _name);
-        json.put("phone", _phone);
-        json.put("email", _email);
+        json.put("title", title);
+        json.put("description", description);
+        json.put("name", name);
+        json.put("phone", phone);
+        json.put("email", email);
         return json;
     }
 }

@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RSSNews {
-    private List<News> _outdoor;
-    private List<News> _cinema;
+    private List<News> outdoor;
+    private List<News> cinema;
 
     public void refresh() throws RSSActivitiesException {
         JSONObject outdoorJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dsortir%26code%3Dca");
         JSONObject cinemaJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dcinema%26code%3Dca");
-        _outdoor = parse(outdoorJson);
-        _cinema = parse(cinemaJson);
+        outdoor = parse(outdoorJson);
+        cinema = parse(cinemaJson);
     }
 
     private JSONObject load(String url) throws RSSActivitiesException {
@@ -57,17 +57,17 @@ public class RSSNews {
     }
 
     public List<News> getOutdoorNews() {
-        return _outdoor;
+        return outdoor;
     }
 
     public List<News> getCinemaNews() {
-        return _cinema;
+        return cinema;
     }
 
     public List<News> getAllNews() {
         List<News> all = new ArrayList<>();
-        all.addAll(_outdoor);
-        all.addAll(_cinema);
+        all.addAll(outdoor);
+        all.addAll(cinema);
         return all;
     }
 }

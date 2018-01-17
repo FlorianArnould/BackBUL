@@ -13,10 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @author Samy
- */
+
 public class PostDAO {
 
     private Connection con;
@@ -25,62 +24,42 @@ public class PostDAO {
         con = SingletonConnection.getConnection();
     }
 
-    public ArrayList<Post> getPosts() throws DAOException {
-        String req = "select * from Post";
-        ArrayList<Post> listeP = new ArrayList<Post>();
-        try (PreparedStatement ps = con.prepareStatement(req);) {
-            try (ResultSet resultat = ps.executeQuery()) {
-                while (resultat.next()) {
-                    // TODO: 17/01/18 add the real coordinates
-                    GPSCoordinates gps = new GPSCoordinates(0, 0);
-                    Post p = new Post(resultat.getString(2), resultat.getString(3), resultat.getString(4), gps);
-                    p.setPhone(resultat.getString(4));
-                    p.setEmail(resultat.getString(5));
-                    listeP.add(p);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException("Error cant get Posts" + e.getMessage());
-        }
-        return listeP;
-    }
-
-    public ArrayList<Post> getPosts(String rech) throws DAOException {
+    public List<Post> getPosts(String rech) throws DAOException {
         String req = "select * from Post where description like ? ";
-        ArrayList<Post> listeP = new ArrayList<Post>();
+        List<Post> list = new ArrayList<>();
         try (PreparedStatement ps = con.prepareStatement(req)) {
             ps.setString(1, "%" + rech + "%");
-            try (ResultSet resultat = ps.executeQuery()) {
-                while (resultat.next()) {
-                    GPSCoordinates gps = new GPSCoordinates(resultat.getFloat(6), resultat.getFloat(7));
-                    Post p = new Post(resultat.getString(1), resultat.getString(2), resultat.getString(3), gps);
-                    p.setPhone(resultat.getString(4));
-                    p.setEmail(resultat.getString(5));
-                    listeP.add(p);
+            try (ResultSet result = ps.executeQuery()) {
+                while (result.next()) {
+                    GPSCoordinates gps = new GPSCoordinates(result.getFloat(6), result.getFloat(7));
+                    Post p = new Post(result.getString(1), result.getString(2), result.getString(3), gps);
+                    p.setPhone(result.getString(4));
+                    p.setEmail(result.getString(5));
+                    list.add(p);
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException("Error cant get Posts with figured name" + e.getMessage());
+            throw new DAOException("Error cannot get Posts with figured name " + rech + " : " + e.getMessage());
         }
-        return listeP;
+        return list;
     }
 
     public void createPost(Post p) throws DAOException {
         String req = "INSERT INTO post(title,description,name,phone,email,gpsLong,gbsLat) values (?,?,?,?,?,?,?)";
-        try(PreparedStatement preparedStatement = con.prepareStatement(req)) {
-            preparedStatement.setString(1, p.getTitle());
-            preparedStatement.setString(2, p.getDescription());
-            preparedStatement.setString(3, p.getName());
-            preparedStatement.setString(4, p.getPhone());
-            preparedStatement.setString(5, p.getEmail());
-            preparedStatement.setFloat(6, (float)p.getCoordinates().getLongitude());
-            preparedStatement.setFloat(7, (float)p.getCoordinates().getLatitude());
-            int result = preparedStatement.executeUpdate();
+        try (PreparedStatement ps = con.prepareStatement(req)) {
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getDescription());
+            ps.setString(3, p.getName());
+            ps.setString(4, p.getPhone());
+            ps.setString(5, p.getEmail());
+            ps.setFloat(6, (float) p.getCoordinates().getLongitude());
+            ps.setFloat(7, (float) p.getCoordinates().getLatitude());
+            int result = ps.executeUpdate();
             if (result != 1) {
                 throw new DAOException("Cannot insert the new post");
             }
         } catch (SQLException e) {
-            throw new DAOException("An error occurred while Adding new POST :" + e.getMessage(), e);
+            throw new DAOException("An error occurred while adding new post :" + e.getMessage(), e);
         }
     }
 }

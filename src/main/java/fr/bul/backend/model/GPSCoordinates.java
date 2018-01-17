@@ -1,20 +1,20 @@
 package fr.bul.backend.model;
 
 public class GPSCoordinates {
-    private double _latitude;
-    private double _longitude;
+    private double latitude;
+    private double longitude;
 
     public GPSCoordinates(double latitude, double longitude) {
-        _latitude = latitude;
-        _longitude = longitude;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public double getLatitude() {
-        return _latitude;
+        return latitude;
     }
 
     public double getLongitude() {
-        return _longitude;
+        return longitude;
     }
 
 }

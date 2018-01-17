@@ -15,6 +15,6 @@ public class Application {
         post(AddPostsService.LOCATION, new AddPostsService());
         post(SearchPostService.LOCATION, new SearchPostService());
         post(EmergencyService.LOCATION, new EmergencyService());
-        
+
     }
 }

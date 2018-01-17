@@ -14,79 +14,58 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @author Samy
- */
+
 public class ActivityDAO {
 
     private Connection con;
-    private CategoryDAO catDAO = null;
 
     public ActivityDAO() {
         this.con = SingletonConnection.getConnection();
     }
 
-    public ArrayList<Activity> getActivities(String rech) throws DAOException {
+    public List<Activity> getActivities(String search) throws DAOException {
         String req = "SELECT * from activity as a join category as c on a.idcat=c.id where a.description like ? ";
-        ArrayList<Activity> listeA = new ArrayList<Activity>();
         try (PreparedStatement ps = con.prepareStatement(req)) {
-            ps.setString(1, "%" + rech + "%");
-            try (ResultSet resultat = ps.executeQuery()) {
-                while (resultat.next()) {
-                    GPSCoordinates gps = new GPSCoordinates(resultat.getFloat(8), resultat.getFloat(9));
-                    catDAO = new CategoryDAO();
-
-                    Category cat = new Category(resultat.getInt(2), resultat.getString(12));
-                    //Category cat = new Category(resultat.getInt("idcat"), resultat.getString("category.name"));
-
-                    Activity a = new Activity(resultat.getString(3), resultat.getString(4), resultat.getString(5), gps, cat);
-
-                    a.setPhone(resultat.getString("phone"));
-                    a.setEmail(resultat.getString("email"));
-                    a.setUrl_img(resultat.getString("url_image"));
-
-                    listeA.add(a);
-                }
-            }
+            ps.setString(1, "%" + search + "%");
+            return execute(ps);
         } catch (SQLException e) {
-            throw new DAOException("Error cant get Posts with figured name" + e.getMessage());
+            throw new DAOException("Error cannot get Posts with figured name " + search + " : " + e.getMessage());
         }
-        return listeA;
     }
 
-    public ArrayList<Activity> getActivities(String rech, String categ) throws DAOException {
+    public List<Activity> getActivities(String search, String category) throws DAOException {
         String req = "SELECT * from activity as a join category as c on a.idcat=c.id where a.description like ? and c.name = ?";
 
-
-        ArrayList<Activity> listeA = new ArrayList<Activity>();
         try (PreparedStatement ps = con.prepareStatement(req)) {
 
-            ps.setString(1, "%" + rech + "%");
-            ps.setString(2, categ);
-
-            try (ResultSet resultat = ps.executeQuery()) {
-                while (resultat.next()) {
-
-                    GPSCoordinates gps = new GPSCoordinates(resultat.getFloat(8), resultat.getFloat(9));
-                    catDAO = new CategoryDAO();
-
-                    Category cat = new Category(resultat.getInt(2), resultat.getString(12));
-
-
-                    Activity a = new Activity(resultat.getString(3), resultat.getString(4), resultat.getString(5), gps, cat);
-
-                    a.setPhone(resultat.getString("phone"));
-                    a.setEmail(resultat.getString("email"));
-                    a.setUrl_img(resultat.getString("url_image"));
-
-                    listeA.add(a);
-                }
-            }
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, category);
+            return execute(ps);
         } catch (SQLException e) {
             throw new DAOException("Error cant get Activities with figured name" + e.getMessage());
         }
-        return listeA;
     }
 
+    private List<Activity> execute(PreparedStatement ps) throws SQLException {
+        List<Activity> list = new ArrayList<>();
+        try (ResultSet result = ps.executeQuery()) {
+            while (result.next()) {
+
+                GPSCoordinates gps = new GPSCoordinates(result.getFloat(8), result.getFloat(9));
+
+                Category cat = new Category(result.getInt(2), result.getString(12));
+
+                Activity a = new Activity(result.getString(3), result.getString(4), result.getString(5), gps, cat);
+
+                a.setPhone(result.getString("phone"));
+                a.setEmail(result.getString("email"));
+                a.setImageLink(result.getString("url_image"));
+
+                list.add(a);
+            }
+        }
+        return list;
+    }
 }

@@ -4,22 +4,22 @@ import org.json.JSONObject;
 
 
 public class ElementToSend implements JsonElement {
-    private JsonElement _element;
-    private int _distance;
+    private JsonElement element;
+    private int distance;
 
     public ElementToSend(JsonElement element, int distance) {
-        _element = element;
-        _distance = distance;
+        this.element = element;
+        this.distance = distance;
     }
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = _element.toJSON();
-        json.put("distance", _distance);
+        JSONObject json = element.toJSON();
+        json.put("distance", distance);
         return json;
     }
 
     public int getDistance() {
-        return _distance;
+        return distance;
     }
 }
