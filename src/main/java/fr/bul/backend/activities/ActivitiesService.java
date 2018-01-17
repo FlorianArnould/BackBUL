@@ -30,6 +30,7 @@ public class ActivitiesService implements Route {
             int end = json.getInt("end");
             JSONObject answer = new JSONObject();
             List<JsonElement> toSend = prepare_List_According_filter(json);
+            toSend= toSend.subList(Math.min(begin, toSend.size() - 1), Math.min(end, toSend.size()));
             for (JsonElement element : toSend) {
                 answer.accumulate("activity", element.toJSON());
             }
