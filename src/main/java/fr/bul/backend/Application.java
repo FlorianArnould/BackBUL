@@ -11,6 +11,7 @@ public class Application {
     public static void main(String[] args) {
         port(8080);
         staticFileLocation("/public");
+        enableCORS();
         post(ActivitiesService.LOCATION, "*/*", new ActivitiesService());
         get(ActivitiesService.LOCATION, "*/*", (request, response) -> "");
         post(AddPostsService.LOCATION, "*/*", new AddPostsService());
@@ -18,5 +19,31 @@ public class Application {
         post(SearchPostService.LOCATION, "*/*", new SearchPostService());
         post(EmergencyService.LOCATION, "*/*", new EmergencyService());
         get(EmergencyService.LOCATION, "*/*", (request, response) -> "");
+    }
+
+    private static void enableCORS() {
+
+        options("/*", (request, response) -> {
+
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
+        /*before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+            // Note: this may or may not be necessary in your particular application
+            response.type("application/json");
+        });*/
     }
 }
