@@ -28,7 +28,6 @@ public class AddPostsService implements Route {
             dao.createPost(post);
             JSONObject answer = new JSONObject();
             answer.put("success", true);
-            Utils.setHeader(response);
             return answer.toString(4);
         } catch (JSONException e) {
             LOGGER.error("JSON error : " + e.getMessage(), e);

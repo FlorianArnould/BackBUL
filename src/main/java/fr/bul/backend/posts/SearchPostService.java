@@ -45,7 +45,6 @@ public class SearchPostService implements Route {
             for (ElementToSend post : postsToSend) {
                 answer.put(post.toJSON());
             }
-            Utils.setHeader(response);
             return answer.toString(4);
         } catch (DAOException e) {
             response.status(500);

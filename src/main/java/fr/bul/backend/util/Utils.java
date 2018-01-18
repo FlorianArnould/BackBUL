@@ -19,8 +19,4 @@ public class Utils {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c * 1000;
     }
-    public static void setHeader(Response response){
-        response.header("Access-Control-Allow-Origin", "*");
-        response.header("Access-Control-Allow-Methods", "POST");
-    }
 }

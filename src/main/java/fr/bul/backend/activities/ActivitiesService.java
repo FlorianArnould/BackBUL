@@ -34,7 +34,6 @@ public class ActivitiesService implements Route {
             for (JsonElement element : toSend) {
                 answer.put(element.toJSON());
             }
-            Utils.setHeader(response);
             return answer.toString(4);
         } catch (DAOException e) {
             LOGGER.error("DAO error : " + e.getMessage(), e);
