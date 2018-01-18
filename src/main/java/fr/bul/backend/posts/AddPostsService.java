@@ -20,6 +20,7 @@ public class AddPostsService implements Route {
     @Override
     public Object handle(Request request, Response response) {
         try {
+            LOGGER.info("new Post arrived");
             JSONObject json = new JSONObject(request.body());
             GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
             Post post = new Post(json.getString("title"), json.getString("description"), json.getString("name"), gps);

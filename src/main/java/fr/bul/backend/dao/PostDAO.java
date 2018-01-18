@@ -25,7 +25,7 @@ public class PostDAO {
     }
 
     public List<Post> getPosts(String rech) throws DAOException {
-        String req = "select * from Post where description like ? ";
+        String req = "select * from Post where description like ? OR title like ?";
         List<Post> list = new ArrayList<>();
         try (PreparedStatement ps = con.prepareStatement(req)) {
             ps.setString(1, "%" + rech + "%");
