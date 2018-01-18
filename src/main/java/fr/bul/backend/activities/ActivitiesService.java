@@ -73,7 +73,7 @@ public class ActivitiesService implements Route {
                 activityDAO = dao.getActivities(json.getString("search"), filter);
                 activityRSS = rss.getCinemaNews();
                 break;
-            case "patrimony": //dao
+            case "monument": //dao
                 activityDAO = dao.getActivities(json.getString("search"), filter);
                 activityRSS = new ArrayList<>(); // element kept empty for future extensions
                 break;
