@@ -4,6 +4,7 @@ import fr.bul.backend.dao.DAOException;
 import fr.bul.backend.dao.PostDAO;
 import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Post;
+import fr.bul.backend.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -29,11 +30,11 @@ public class AddPostsService implements Route {
             answer.put("success", true);
             return answer.toString(4);
         } catch (JSONException e) {
-            LOGGER.error("JSON error : " +e.getMessage(), e);
+            LOGGER.error("JSON error : " + e.getMessage(), e);
             response.status(400);
             return "Missing information";
         } catch (DAOException e) {
-            LOGGER.error("DAO error : " +e.getMessage(), e);
+            LOGGER.error("DAO error : " + e.getMessage(), e);
             response.status(500);
             return "An error occurred";
         }

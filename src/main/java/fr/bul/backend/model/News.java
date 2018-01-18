@@ -3,22 +3,22 @@ package fr.bul.backend.model;
 import org.json.JSONObject;
 
 public class News implements JsonElement {
-    private String _title;
-    private String _description;
-    private String _imageLink;
+    private String title;
+    private String description;
+    private String imageLink;
 
     public News(String title, String description, String imageLink) {
-        _title = title;
-        _description = description;
-        _imageLink = imageLink;
+        this.title = title;
+        this.description = description;
+        this.imageLink = imageLink;
     }
 
     @Override
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put("title", _title);
-        json.put("description", _description);
-        json.put("image", _imageLink);
+        json.put("title", title);
+        json.put("description", description);
+        json.put("image", imageLink);
         return json;
     }
 }

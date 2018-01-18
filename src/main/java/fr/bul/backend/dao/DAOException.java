@@ -5,9 +5,7 @@
  */
 package fr.bul.backend.dao;
 
-/**
- * @author Samy
- */
+
 public class DAOException extends Exception {
     DAOException(String message, Exception e) {
         super(message, e);

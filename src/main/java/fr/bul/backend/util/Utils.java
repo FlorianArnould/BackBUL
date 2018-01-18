@@ -1,6 +1,7 @@
 package fr.bul.backend.util;
 
 import fr.bul.backend.model.GPSCoordinates;
+import spark.Response;
 
 public class Utils {
     private static final double R = 6378.137;

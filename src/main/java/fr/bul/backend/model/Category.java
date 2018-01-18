@@ -5,9 +5,7 @@
  */
 package fr.bul.backend.model;
 
-/**
- * @author Samy
- */
+
 public class Category {
 
     private int idC;
