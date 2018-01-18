@@ -59,6 +59,8 @@ public class Activity implements JsonElement {
         json.put("phone", phone);
         json.put("email", email);
         json.put("imageLink", imageLink);
+        json.put("latitude",coordinates.getLatitude());
+        json.put("longitude",coordinates.getLongitude());
         return json;
     }
 }
