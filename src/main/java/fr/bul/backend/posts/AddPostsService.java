@@ -4,6 +4,7 @@ import fr.bul.backend.dao.DAOException;
 import fr.bul.backend.dao.PostDAO;
 import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Post;
+import fr.bul.backend.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class AddPostsService implements Route {
             dao.createPost(post);
             JSONObject answer = new JSONObject();
             answer.put("success", true);
+            Utils.setHeader(response);
             return answer.toString(4);
         } catch (JSONException e) {
             LOGGER.error("JSON error : " + e.getMessage(), e);
