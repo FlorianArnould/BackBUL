@@ -4,6 +4,7 @@ import fr.bul.backend.dao.ActivityDAO;
 import fr.bul.backend.dao.DAOException;
 import fr.bul.backend.model.*;
 import fr.bul.backend.util.Utils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,11 +28,11 @@ public class ActivitiesService implements Route {
             JSONObject json = new JSONObject(request.body());
             int begin = json.getInt("begin");
             int end = json.getInt("end");
-            JSONObject answer = new JSONObject();
             List<JsonElement> toSend = prepareListAccordingFilter(json);
             toSend = toSend.subList(Math.min(begin, toSend.size() - 1), Math.min(end, toSend.size()));
+            JSONArray answer = new JSONArray();
             for (JsonElement element : toSend) {
-                answer.accumulate("activity", element.toJSON());
+                answer.put(element.toJSON());
             }
             return answer.toString(4);
         } catch (DAOException e) {

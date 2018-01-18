@@ -6,6 +6,7 @@ import fr.bul.backend.model.ElementToSend;
 import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Post;
 import fr.bul.backend.util.Utils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -40,9 +41,9 @@ public class SearchPostService implements Route {
             begin = Math.min(begin, Math.max(posts.size() - 1, 0));
             end = Math.min(end, posts.size());
             List<ElementToSend> postsToSend = elementsToSend.subList(begin, end);
-            JSONObject answer = new JSONObject();
+            JSONArray answer = new JSONArray();
             for (ElementToSend post : postsToSend) {
-                answer.accumulate("posts", post.toJSON());
+                answer.put(post.toJSON());
             }
             return answer.toString(4);
         } catch (DAOException e) {
