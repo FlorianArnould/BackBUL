@@ -21,5 +21,6 @@ public class Utils {
     }
     public static void setHeader(Response response){
         response.header("Access-Control-Allow-Origin", "*");
+        response.header("Access-Control-Allow-Methods", "POST");
     }
 }
