@@ -10,7 +10,7 @@ import static spark.Spark.*;
 public class Application {
     public static void main(String[] args) {
         port(8080);
-        staticFileLocation("/public");
+        externalStaticFileLocation("/home/administrateur/img");
         enableCORS("*", "POST");
         post(ActivitiesService.LOCATION, "*/*", new ActivitiesService());
         get(ActivitiesService.LOCATION, "*/*", (request, response) -> "");
