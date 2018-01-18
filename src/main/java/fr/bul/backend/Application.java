@@ -11,10 +11,10 @@ public class Application {
     public static void main(String[] args) {
         port(8080);
         staticFileLocation("/public");
-        post(ActivitiesService.LOCATION, new ActivitiesService());
-        post(AddPostsService.LOCATION, new AddPostsService());
-        post(SearchPostService.LOCATION, new SearchPostService());
-        post(EmergencyService.LOCATION, new EmergencyService());
+        post(ActivitiesService.LOCATION, "*/*", new ActivitiesService());
+        post(AddPostsService.LOCATION, "*/*", new AddPostsService());
+        post(SearchPostService.LOCATION, "*/*", new SearchPostService());
+        post(EmergencyService.LOCATION, "*/*", new EmergencyService());
 
     }
 }
