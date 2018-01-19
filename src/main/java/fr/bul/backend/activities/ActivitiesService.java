@@ -55,7 +55,7 @@ public class ActivitiesService implements Route {
     }
 
 
-    private List<JsonElement> prepareListAccordingFilter(JSONObject json) throws ActivityException, DAOException, RSSActivitiesException {
+    private List<JsonElement> prepareListAccordingFilter(JSONObject json) throws ActivityException, DAOException {
         String filter = json.getString("filter");
         ActivityDAO dao = new ActivityDAO();
         RSSNews rss = new RSSNews();
@@ -65,27 +65,34 @@ public class ActivitiesService implements Route {
         List<Activity> activityDAO;
         List<News> activityRSS;
         String search = json.getString("search");
-        switch (filter) {
-            case "outdoor": //rss
-                activityDAO = dao.getActivities(search, filter);
-                activityRSS = rss.getOutdoorNews();
-                break;
-            case "cinema": //rss
-                activityDAO = dao.getActivities(search, filter);
-                activityRSS = rss.getCinemaNews();
-                break;
-            case "monument": //dao
-            case "shop":
-                activityDAO = dao.getActivities(search, filter);
-                activityRSS = new ArrayList<>(); // element kept empty for future extensions
-                break;
-            case "all": //rss + dao
-                activityDAO = dao.getActivities(search);
-                activityRSS = rss.getAllNews();
-                break;
-            default:
-                throw new ActivityException("The category " + filter + " does not exist");
-                // this filter option doesn't exist
+        try {
+            switch (filter) {
+                case "outdoor": //rss
+                    activityDAO = dao.getActivities(search, filter);
+                    activityRSS = rss.getOutdoorNews();
+                    break;
+                case "cinema": //rss
+                    activityDAO = dao.getActivities(search, filter);
+                    activityRSS = rss.getCinemaNews();
+                    break;
+                case "monument": //dao
+                case "shop":
+                    activityDAO = dao.getActivities(search, filter);
+                    activityRSS = new ArrayList<>(); // element kept empty for future extensions
+                    break;
+                case "all": //rss + dao
+                    activityDAO = dao.getActivities(search);
+                    activityRSS = rss.getAllNews();
+                    break;
+                default:
+                    throw new ActivityException("The category " + filter + " does not exist");
+                    // this filter option doesn't exist
+            }
+        }
+        catch(RSSActivitiesException e)
+        {
+            LOGGER.error("Cannot load the rss news : "+e.getMessage(),e);
+            return toSendList(activityDAO, new ArrayList<>(), gps);
         }
         return toSendList(activityDAO, activityRSS, gps);
     }
