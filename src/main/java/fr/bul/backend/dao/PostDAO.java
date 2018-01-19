@@ -25,11 +25,11 @@ public class PostDAO {
     }
 
     public List<Post> getPosts(String rech) throws DAOException {
-        String req = "select * from Post where description like ? OR title like ?";
+        String req = "select * from Post where LOWER(description) like ? OR LOWER(title) like ?";
         List<Post> list = new ArrayList<>();
         try (PreparedStatement ps = con.prepareStatement(req)) {
-            ps.setString(1, "%" + rech + "%");
-            ps.setString(2, "%" + rech + "%");
+            ps.setString(1, "%" + rech.toLowerCase() + "%");
+            ps.setString(2, "%" + rech.toLowerCase() + "%");
             try (ResultSet result = ps.executeQuery()) {
                 while (result.next()) {
                     GPSCoordinates gps = new GPSCoordinates(result.getFloat(6), result.getFloat(7));
