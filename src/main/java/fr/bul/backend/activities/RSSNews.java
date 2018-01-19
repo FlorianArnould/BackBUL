@@ -2,6 +2,7 @@ package fr.bul.backend.activities;
 
 import fr.bul.backend.model.News;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -17,10 +18,14 @@ public class RSSNews {
     private List<News> cinema;
 
     public void refresh() throws RSSActivitiesException {
-        JSONObject outdoorJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dsortir%26code%3Dca");
-        JSONObject cinemaJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dcinema%26code%3Dca");
-        outdoor = parse(outdoorJson);
-        cinema = parse(cinemaJson);
+        try {
+            JSONObject outdoorJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dsortir%26code%3Dca");
+            JSONObject cinemaJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dcinema%26code%3Dca");
+            outdoor = parse(outdoorJson);
+            cinema = parse(cinemaJson);
+        }catch(JSONException e){
+            throw new RSSActivitiesException("Cannot parse the RSS", e);
+        }
     }
 
     private JSONObject load(String url) throws RSSActivitiesException {
