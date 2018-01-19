@@ -62,8 +62,8 @@ public class ActivitiesService implements Route {
         RSSNews rss = new RSSNews();
         try {
             rss.refresh();
-        } catch(RSSActivitiesException e) {
-            LOGGER.error("Cannot load the rss news : "+e.getMessage(),e);
+        } catch (RSSActivitiesException e) {
+            LOGGER.error("Cannot load the rss news : " + e.getMessage(), e);
         }
         switch (filter) {
             case "outdoor": //rss
@@ -87,7 +87,7 @@ public class ActivitiesService implements Route {
                 throw new ActivityException("The category " + filter + " does not exist");
                 // this filter option doesn't exist
         }
-        if(activityRSS == null){
+        if (activityRSS == null) {
             return toSendList(activityDAO, new ArrayList<>(), gps);
         }
         return toSendList(activityDAO, activityRSS, gps);

@@ -4,6 +4,8 @@ import fr.bul.backend.activities.ActivitiesService;
 import fr.bul.backend.emergency.EmergencyService;
 import fr.bul.backend.posts.AddPostsService;
 import fr.bul.backend.posts.SearchPostService;
+import fr.bul.backend.stats.AddStatsService;
+import fr.bul.backend.stats.GetStatsService;
 
 import static spark.Spark.*;
 
@@ -19,6 +21,8 @@ public class Application {
         post(SearchPostService.LOCATION, "*/*", new SearchPostService());
         post(EmergencyService.LOCATION, "*/*", new EmergencyService());
         get(EmergencyService.LOCATION, "*/*", (request, response) -> "");
+        post(AddStatsService.LOCATION, "*/*", new AddStatsService());
+        get(GetStatsService.LOCATION, "*/*", new GetStatsService());
     }
 
     private static void enableCORS(final String origin, final String methods) {

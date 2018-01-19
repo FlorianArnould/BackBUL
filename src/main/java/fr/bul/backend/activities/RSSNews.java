@@ -23,7 +23,7 @@ public class RSSNews {
             JSONObject cinemaJson = load("https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcaen.maville.com%2Fflux%2Frss%2Factu.php%3Fxtor%3DRSS-18%26c%3Dcinema%26code%3Dca");
             outdoor = parse(outdoorJson);
             cinema = parse(cinemaJson);
-        }catch(JSONException e){
+        } catch (JSONException e) {
             throw new RSSActivitiesException("Cannot parse the RSS", e);
         }
     }
@@ -71,10 +71,10 @@ public class RSSNews {
 
     public List<News> getAllNews() {
         List<News> all = new ArrayList<>();
-        if(outdoor != null) {
+        if (outdoor != null) {
             all.addAll(outdoor);
         }
-        if(cinema != null) {
+        if (cinema != null) {
             all.addAll(cinema);
         }
         return all;

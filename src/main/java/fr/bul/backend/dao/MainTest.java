@@ -7,29 +7,29 @@ package fr.bul.backend.dao;
 
 import fr.bul.backend.model.GPSCoordinates;
 import fr.bul.backend.model.Stat;
+
 import java.util.ArrayList;
 
 /**
- *
  * @author Samy
  */
 public class MainTest {
-    public static void main(String args[]){
+    public static void main(String args[]) {
         StatsDao daos = new StatsDao();
-        
+
         ArrayList<Stat> stats = new ArrayList<Stat>();
         Stat test = new Stat("actualites", new GPSCoordinates(45, 0.1), 02222);
         try {
-        daos.addStat(test);
-        stats=(ArrayList)daos.getStats();
-            System.out.println("la taille est : "+stats.size());
+            daos.addStat(test);
+            stats = (ArrayList) daos.getStats();
+            System.out.println("la taille est : " + stats.size());
             for (Stat stat : stats) {
-			System.out.println(stat.getService());
-		}
-        }catch(DAOException e) {
+                System.out.println(stat.getService());
+            }
+        } catch (DAOException e) {
             e.printStackTrace();
         }
-    
+
     }
-    
+
 }

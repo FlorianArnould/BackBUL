@@ -66,8 +66,8 @@ public class Post implements JsonElement {
         json.put("name", name);
         json.put("phone", phone);
         json.put("email", email);
-        json.put("latitude",coordinates.getLatitude());
-        json.put("longitude",coordinates.getLongitude());
+        json.put("latitude", coordinates.getLatitude());
+        json.put("longitude", coordinates.getLongitude());
         return json;
     }
 }

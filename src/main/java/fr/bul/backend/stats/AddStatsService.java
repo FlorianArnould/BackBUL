@@ -1,9 +1,9 @@
-package fr.bul.backend.posts;
+package fr.bul.backend.stats;
 
 import fr.bul.backend.dao.DAOException;
-import fr.bul.backend.dao.PostDAO;
+import fr.bul.backend.dao.StatsDao;
 import fr.bul.backend.model.GPSCoordinates;
-import fr.bul.backend.model.Post;
+import fr.bul.backend.model.Stat;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,20 +12,19 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class AddPostsService implements Route {
-    public static final String LOCATION = "/addPost";
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddPostsService.class);
+public class AddStatsService implements Route {
+    public static final String LOCATION = "/addStats";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddStatsService.class);
 
     @Override
     public Object handle(Request request, Response response) {
         try {
-            LOGGER.info("new Post arrived");
             JSONObject json = new JSONObject(request.body());
+            StatsDao dao = new StatsDao();
             GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
-            Post post = new Post(json.getString("title"), json.getString("description"), json.getString("name"), gps);
-            post.setPhone(json.optString("phone", null));
-            PostDAO dao = new PostDAO();
-            dao.createPost(post);
+            String service = json.getString("service");
+            long timestamp = json.getInt("timestamp");
+            dao.addStat(new Stat(service, gps, timestamp));
             JSONObject answer = new JSONObject();
             answer.put("success", true);
             return answer.toString(4);
