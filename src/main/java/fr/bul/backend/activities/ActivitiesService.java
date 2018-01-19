@@ -47,10 +47,6 @@ public class ActivitiesService implements Route {
             LOGGER.error("JSON error : " + e.getMessage(), e);
             response.status(400);
             return "Missing information";
-        } catch (RSSActivitiesException e) {
-            LOGGER.error("RSS error : " + e.getMessage(), e);
-            response.status(500);
-            return "Cannot get the RSS news";
         }
     }
 
@@ -58,40 +54,40 @@ public class ActivitiesService implements Route {
     private List<JsonElement> prepareListAccordingFilter(JSONObject json) throws ActivityException, DAOException {
         String filter = json.getString("filter");
         ActivityDAO dao = new ActivityDAO();
-        RSSNews rss = new RSSNews();
-        rss.refresh();
 
         GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
         List<Activity> activityDAO;
         List<News> activityRSS;
         String search = json.getString("search");
+        RSSNews rss = new RSSNews();
         try {
-            switch (filter) {
-                case "outdoor": //rss
-                    activityDAO = dao.getActivities(search, filter);
-                    activityRSS = rss.getOutdoorNews();
-                    break;
-                case "cinema": //rss
-                    activityDAO = dao.getActivities(search, filter);
-                    activityRSS = rss.getCinemaNews();
-                    break;
-                case "monument": //dao
-                case "shop":
-                    activityDAO = dao.getActivities(search, filter);
-                    activityRSS = new ArrayList<>(); // element kept empty for future extensions
-                    break;
-                case "all": //rss + dao
-                    activityDAO = dao.getActivities(search);
-                    activityRSS = rss.getAllNews();
-                    break;
-                default:
-                    throw new ActivityException("The category " + filter + " does not exist");
-                    // this filter option doesn't exist
-            }
-        }
-        catch(RSSActivitiesException e)
-        {
+            rss.refresh();
+        } catch(RSSActivitiesException e) {
             LOGGER.error("Cannot load the rss news : "+e.getMessage(),e);
+        }
+        switch (filter) {
+            case "outdoor": //rss
+                activityDAO = dao.getActivities(search, filter);
+                activityRSS = rss.getOutdoorNews();
+                break;
+            case "cinema": //rss
+                activityDAO = dao.getActivities(search, filter);
+                activityRSS = rss.getCinemaNews();
+                break;
+            case "monument": //dao
+            case "shop":
+                activityDAO = dao.getActivities(search, filter);
+                activityRSS = new ArrayList<>(); // element kept empty for future extensions
+                break;
+            case "all": //rss + dao
+                activityDAO = dao.getActivities(search);
+                activityRSS = rss.getAllNews();
+                break;
+            default:
+                throw new ActivityException("The category " + filter + " does not exist");
+                // this filter option doesn't exist
+        }
+        if(activityRSS == null){
             return toSendList(activityDAO, new ArrayList<>(), gps);
         }
         return toSendList(activityDAO, activityRSS, gps);
