@@ -29,7 +29,7 @@ public class ActivitiesService implements Route {
             int begin = json.getInt("begin");
             int end = json.getInt("end");
             List<JsonElement> toSend = prepareListAccordingFilter(json);
-            toSend = toSend.subList(Math.min(begin, toSend.size() - 1), Math.min(end, toSend.size()));
+            toSend = toSend.subList(begin, Math.min(end, toSend.size()));
             JSONArray answer = new JSONArray();
             for (JsonElement element : toSend) {
                 answer.put(element.toJSON());
