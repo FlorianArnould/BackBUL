@@ -71,8 +71,12 @@ public class RSSNews {
 
     public List<News> getAllNews() {
         List<News> all = new ArrayList<>();
-        all.addAll(outdoor);
-        all.addAll(cinema);
+        if(outdoor != null) {
+            all.addAll(outdoor);
+        }
+        if(cinema != null) {
+            all.addAll(cinema);
+        }
         return all;
     }
 }
