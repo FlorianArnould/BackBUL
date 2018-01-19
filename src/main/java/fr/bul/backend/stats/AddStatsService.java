@@ -23,7 +23,7 @@ public class AddStatsService implements Route {
             StatsDao dao = new StatsDao();
             GPSCoordinates gps = new GPSCoordinates(json.getDouble("latitude"), json.getDouble("longitude"));
             String service = json.getString("service");
-            long timestamp = json.getInt("timestamp");
+            long timestamp = json.getLong("timestamp");
             dao.addStat(new Stat(service, gps, timestamp));
             JSONObject answer = new JSONObject();
             answer.put("success", true);
