@@ -14,7 +14,7 @@ public class EmergencyService implements Route {
         try {
             JSONObject json = new JSONObject(request.body());
             // Check if we get all needed information for the rescue
-            if (!json.has("latitude") || json.has("longitude") || json.has("category")) {
+            if (!json.has("latitude") || !json.has("longitude") || !json.has("category")) {
                 response.status(400);
                 return "Missing information";
             }
