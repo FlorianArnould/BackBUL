@@ -26,9 +26,10 @@ public class ActivityDAO {
     }
 
     public List<Activity> getActivities(String search) throws DAOException {
-        String req = "SELECT * from activity as a join category as c on a.idcat=c.id where a.description like ? ";
+        String req = "SELECT * from activity as a join category as c on a.idcat=c.id where a.description like ? OR a.title like ?";
         try (PreparedStatement ps = con.prepareStatement(req)) {
             ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
             return execute(ps);
         } catch (SQLException e) {
             throw new DAOException("Error cannot get Posts with figured name " + search + " : " + e.getMessage());
@@ -36,12 +37,13 @@ public class ActivityDAO {
     }
 
     public List<Activity> getActivities(String search, String category) throws DAOException {
-        String req = "SELECT * from activity as a join category as c on a.idcat=c.id where a.description like ? and c.name = ?";
+        String req = "SELECT * from activity as a join category as c on a.idcat=c.id where (a.description like ? or a.title like ?) and c.name = ?";
 
         try (PreparedStatement ps = con.prepareStatement(req)) {
 
             ps.setString(1, "%" + search + "%");
-            ps.setString(2, category);
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, category);
             return execute(ps);
         } catch (SQLException e) {
             throw new DAOException("Error cant get Activities with figured name" + e.getMessage());
